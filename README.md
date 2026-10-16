@@ -652,7 +652,7 @@ Pedro Cecheto
 Matheus Kato**
 
 - [GitHub](https://github.com/diego-dev-brazil)
-- [Repositório Ateliê Renata D'Amore](https://github.com/diego-dev-brazil/Atelie_D_Amore)
+- [Repositório Ateliê Renata D'Amore](https://github.com/diego-dev-brazil/spring-project-atelie-renata-d-amore)
 
 ---
 
