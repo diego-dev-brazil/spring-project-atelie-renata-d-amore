@@ -26,6 +26,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(autenticacaoInterceptor)
                 .addPathPatterns(
                         "/dashboard",
+                        "/notificacoes", "/notificacoes/**",
                         "/estoque", "/estoque/**",
                         "/modelos", "/modelos/**",
                         "/producao", "/producao/**",

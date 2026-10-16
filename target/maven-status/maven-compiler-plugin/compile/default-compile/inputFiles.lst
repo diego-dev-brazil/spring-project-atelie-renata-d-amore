@@ -23,6 +23,11 @@
 /home/diegodevkoga/Documents/Trabalhos Fatec/Vanessa -  II Engenharia de Software/Projeto Ateliê V2/atelie-java/src/main/java/br/com/atelie/application/formatacao/FormatadorValor.java
 /home/diegodevkoga/Documents/Trabalhos Fatec/Vanessa -  II Engenharia de Software/Projeto Ateliê V2/atelie-java/src/main/java/br/com/atelie/application/menu/MenuService.java
 /home/diegodevkoga/Documents/Trabalhos Fatec/Vanessa -  II Engenharia de Software/Projeto Ateliê V2/atelie-java/src/main/java/br/com/atelie/application/modelos/ModeloBolsaService.java
+/home/diegodevkoga/Documents/Trabalhos Fatec/Vanessa -  II Engenharia de Software/Projeto Ateliê V2/atelie-java/src/main/java/br/com/atelie/application/notificacoes/AniversarioFuncionarioNotificacaoProvedor.java
+/home/diegodevkoga/Documents/Trabalhos Fatec/Vanessa -  II Engenharia de Software/Projeto Ateliê V2/atelie-java/src/main/java/br/com/atelie/application/notificacoes/FaltaMaterialNotificacaoProvedor.java
+/home/diegodevkoga/Documents/Trabalhos Fatec/Vanessa -  II Engenharia de Software/Projeto Ateliê V2/atelie-java/src/main/java/br/com/atelie/application/notificacoes/NotificacaoService.java
+/home/diegodevkoga/Documents/Trabalhos Fatec/Vanessa -  II Engenharia de Software/Projeto Ateliê V2/atelie-java/src/main/java/br/com/atelie/application/notificacoes/PagamentoAtrasadoNotificacaoProvedor.java
+/home/diegodevkoga/Documents/Trabalhos Fatec/Vanessa -  II Engenharia de Software/Projeto Ateliê V2/atelie-java/src/main/java/br/com/atelie/application/notificacoes/ProvedorNotificacao.java
 /home/diegodevkoga/Documents/Trabalhos Fatec/Vanessa -  II Engenharia de Software/Projeto Ateliê V2/atelie-java/src/main/java/br/com/atelie/application/producao/ProducaoService.java
 /home/diegodevkoga/Documents/Trabalhos Fatec/Vanessa -  II Engenharia de Software/Projeto Ateliê V2/atelie-java/src/main/java/br/com/atelie/application/relatorios/RelatorioService.java
 /home/diegodevkoga/Documents/Trabalhos Fatec/Vanessa -  II Engenharia de Software/Projeto Ateliê V2/atelie-java/src/main/java/br/com/atelie/application/turmas/TurmaService.java
@@ -36,6 +41,7 @@
 /home/diegodevkoga/Documents/Trabalhos Fatec/Vanessa -  II Engenharia de Software/Projeto Ateliê V2/atelie-java/src/main/java/br/com/atelie/domain/model/Material.java
 /home/diegodevkoga/Documents/Trabalhos Fatec/Vanessa -  II Engenharia de Software/Projeto Ateliê V2/atelie-java/src/main/java/br/com/atelie/domain/model/Metrica.java
 /home/diegodevkoga/Documents/Trabalhos Fatec/Vanessa -  II Engenharia de Software/Projeto Ateliê V2/atelie-java/src/main/java/br/com/atelie/domain/model/ModeloBolsa.java
+/home/diegodevkoga/Documents/Trabalhos Fatec/Vanessa -  II Engenharia de Software/Projeto Ateliê V2/atelie-java/src/main/java/br/com/atelie/domain/model/Notificacao.java
 /home/diegodevkoga/Documents/Trabalhos Fatec/Vanessa -  II Engenharia de Software/Projeto Ateliê V2/atelie-java/src/main/java/br/com/atelie/domain/model/OrdemProducao.java
 /home/diegodevkoga/Documents/Trabalhos Fatec/Vanessa -  II Engenharia de Software/Projeto Ateliê V2/atelie-java/src/main/java/br/com/atelie/domain/model/Perfil.java
 /home/diegodevkoga/Documents/Trabalhos Fatec/Vanessa -  II Engenharia de Software/Projeto Ateliê V2/atelie-java/src/main/java/br/com/atelie/domain/model/TipoMetrica.java
@@ -82,6 +88,7 @@
 /home/diegodevkoga/Documents/Trabalhos Fatec/Vanessa -  II Engenharia de Software/Projeto Ateliê V2/atelie-java/src/main/java/br/com/atelie/web/controller/LoginController.java
 /home/diegodevkoga/Documents/Trabalhos Fatec/Vanessa -  II Engenharia de Software/Projeto Ateliê V2/atelie-java/src/main/java/br/com/atelie/web/controller/ModeloBolsaController.java
 /home/diegodevkoga/Documents/Trabalhos Fatec/Vanessa -  II Engenharia de Software/Projeto Ateliê V2/atelie-java/src/main/java/br/com/atelie/web/controller/ModuloController.java
+/home/diegodevkoga/Documents/Trabalhos Fatec/Vanessa -  II Engenharia de Software/Projeto Ateliê V2/atelie-java/src/main/java/br/com/atelie/web/controller/NotificacaoController.java
 /home/diegodevkoga/Documents/Trabalhos Fatec/Vanessa -  II Engenharia de Software/Projeto Ateliê V2/atelie-java/src/main/java/br/com/atelie/web/controller/ProducaoController.java
 /home/diegodevkoga/Documents/Trabalhos Fatec/Vanessa -  II Engenharia de Software/Projeto Ateliê V2/atelie-java/src/main/java/br/com/atelie/web/controller/RelatorioController.java
 /home/diegodevkoga/Documents/Trabalhos Fatec/Vanessa -  II Engenharia de Software/Projeto Ateliê V2/atelie-java/src/main/java/br/com/atelie/web/controller/TurmaController.java

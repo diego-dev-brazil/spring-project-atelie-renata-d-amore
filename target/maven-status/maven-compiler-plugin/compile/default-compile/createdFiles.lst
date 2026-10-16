@@ -6,6 +6,7 @@ br/com/atelie/application/dashboard/dto/PainelDashboard.class
 br/com/atelie/application/autenticacao/AutenticacaoService.class
 br/com/atelie/application/dashboard/DashboardService.class
 br/com/atelie/infrastructure/seguranca/Sha256CodificadorSenha.class
+br/com/atelie/web/controller/NotificacaoController.class
 br/com/atelie/application/dashboard/indicadores/AlunosCadastradosIndicador.class
 br/com/atelie/domain/model/Turma.class
 br/com/atelie/application/formatacao/FormatadorMoeda.class
@@ -17,8 +18,10 @@ br/com/atelie/domain/model/ItemMenu.class
 br/com/atelie/application/usuarios/UsuarioService.class
 br/com/atelie/application/producao/ProducaoService.class
 br/com/atelie/domain/model/Usuario.class
+br/com/atelie/application/notificacoes/PagamentoAtrasadoNotificacaoProvedor.class
 br/com/atelie/domain/repository/ModeloBolsaComandoRepository.class
 br/com/atelie/web/seguranca/AutenticacaoInterceptor.class
+br/com/atelie/application/notificacoes/AniversarioFuncionarioNotificacaoProvedor.class
 br/com/atelie/domain/model/TipoMetrica.class
 br/com/atelie/web/controller/DashboardController.class
 br/com/atelie/application/autenticacao/UsuarioLogado.class
@@ -48,6 +51,7 @@ br/com/atelie/web/controller/ProducaoController.class
 br/com/atelie/domain/repository/AlunoConsultaRepository.class
 br/com/atelie/application/formatacao/FormatadorQuantidade.class
 br/com/atelie/domain/repository/ProducaoConsultaRepository.class
+br/com/atelie/application/notificacoes/NotificacaoService.class
 br/com/atelie/application/dashboard/indicadores/ProdutosDisponiveisIndicador.class
 br/com/atelie/domain/repository/AlertaRepository.class
 br/com/atelie/domain/model/OrdemProducao$StatusProducao.class
@@ -57,8 +61,10 @@ br/com/atelie/domain/model/Alerta$Severidade.class
 br/com/atelie/infrastructure/memoria/ModeloBolsaRepositoryEmMemoria.class
 br/com/atelie/application/estoque/EstoqueService.class
 br/com/atelie/application/dashboard/indicadores/VendasDoMesIndicador.class
+br/com/atelie/application/notificacoes/FaltaMaterialNotificacaoProvedor.class
 br/com/atelie/web/controller/VendaController.class
 br/com/atelie/domain/seguranca/CodificadorSenha.class
+br/com/atelie/application/notificacoes/ProvedorNotificacao.class
 br/com/atelie/application/configuracoes/ConfiguracaoService.class
 br/com/atelie/domain/model/Perfil.class
 br/com/atelie/domain/repository/ModeloBolsaConsultaRepository.class
@@ -70,9 +76,11 @@ br/com/atelie/application/turmas/TurmaService.class
 br/com/atelie/domain/repository/ConfiguracaoRepository.class
 br/com/atelie/AtelieApplication.class
 br/com/atelie/infrastructure/memoria/VendaRepositoryEmMemoria.class
+br/com/atelie/domain/model/Notificacao$Categoria.class
 br/com/atelie/domain/model/Metrica.class
 br/com/atelie/web/controller/LoginController.class
 br/com/atelie/application/formatacao/FormatadorValor.class
+br/com/atelie/domain/model/Notificacao.class
 br/com/atelie/domain/model/Material.class
 br/com/atelie/infrastructure/memoria/AlunoRepositoryEmMemoria.class
 br/com/atelie/application/dashboard/indicadores/IndicadorDeMetrica.class

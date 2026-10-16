@@ -7,16 +7,12 @@ import br.com.atelie.domain.repository.UsuarioRepository;
 import br.com.atelie.domain.seguranca.CodificadorSenha;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 /**
  * Caso de Uso: Gestão de Funcionários e Controle de Acesso (Usuários).
- *
- * SRP: Cuida apenas das regras de negócio de usuários (criar, editar, ativar/bloquear
- *      acesso, impedir que o único administrador seja removido ou desativado).
- * DIP: Depende de {@link UsuarioRepository}, {@link UsuarioComandoRepository} e
- *      {@link CodificadorSenha} (abstrações).
  */
 @Service
 public class UsuarioService {
@@ -41,7 +37,7 @@ public class UsuarioService {
         return consultaRepository.buscarPorLogin(login);
     }
 
-    public Usuario cadastrarNovo(String login, String nome, String cargo, String senhaPura, Perfil perfil) {
+    public Usuario cadastrarNovo(String login, String nome, String cargo, String senhaPura, Perfil perfil, LocalDate dataNascimento) {
         if (login == null || login.isBlank()) {
             throw new IllegalArgumentException("O login de acesso é obrigatório.");
         }
@@ -52,11 +48,11 @@ public class UsuarioService {
         if (senhaPura == null || senhaPura.isBlank()) {
             throw new IllegalArgumentException("A senha inicial é obrigatória.");
         }
-        Usuario novo = new Usuario(loginNormalizado, nome, cargo, codificadorSenha.codificar(senhaPura), perfil, true);
+        Usuario novo = new Usuario(loginNormalizado, nome, cargo, codificadorSenha.codificar(senhaPura), perfil, true, dataNascimento);
         return comandoRepository.salvar(novo);
     }
 
-    public Usuario atualizar(String login, String nome, String cargo, String novaSenhaPura, Perfil perfil, boolean ativo, String loginLogado) {
+    public Usuario atualizar(String login, String nome, String cargo, String novaSenhaPura, Perfil perfil, boolean ativo, LocalDate dataNascimento, String loginLogado) {
         Usuario existente = consultaRepository.buscarPorLogin(login)
                 .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado."));
 
@@ -68,6 +64,9 @@ public class UsuarioService {
         existente.setCargo(cargo);
         existente.setPerfil(perfil);
         existente.setAtivo(ativo);
+        if (dataNascimento != null) {
+            existente.setDataNascimento(dataNascimento);
+        }
         if (novaSenhaPura != null && !novaSenhaPura.isBlank()) {
             existente.setSenhaCodificada(codificadorSenha.codificar(novaSenhaPura));
         }
@@ -94,4 +93,3 @@ public class UsuarioService {
         }
     }
 }
-

@@ -10,7 +10,7 @@ public record Alerta(TipoAlerta tipo, String mensagem, Severidade severidade) {
     }
 
     public enum TipoAlerta {
-        ESTOQUE, PAGAMENTO, PRODUCAO
+        ESTOQUE, PAGAMENTO, PRODUCAO, ANIVERSARIO
     }
 
     public enum Severidade {

@@ -7,12 +7,15 @@ import br.com.atelie.domain.model.Aluno;
 import br.com.atelie.domain.model.ItemFichaTecnica;
 import br.com.atelie.domain.model.Material;
 import br.com.atelie.domain.model.ModeloBolsa;
+import br.com.atelie.domain.model.Usuario;
 import br.com.atelie.domain.repository.AlertaRepository;
 import br.com.atelie.domain.repository.AlunoConsultaRepository;
 import br.com.atelie.domain.repository.MaterialConsultaRepository;
 import br.com.atelie.domain.repository.ModeloBolsaConsultaRepository;
+import br.com.atelie.domain.repository.UsuarioRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +25,7 @@ import java.util.Optional;
  * - Estoque baixo ({@link MaterialConsultaRepository})
  * - Produção bloqueada por falta de insumo ({@link ModeloBolsaConsultaRepository})
  * - Mensalidades atrasadas de alunos ({@link AlunoConsultaRepository})
+ * - Aniversariantes da equipe ({@link UsuarioRepository})
  */
 @Repository
 public class AlertaRepositoryEmMemoria implements AlertaRepository {
@@ -29,13 +33,16 @@ public class AlertaRepositoryEmMemoria implements AlertaRepository {
     private final MaterialConsultaRepository materialConsulta;
     private final ModeloBolsaConsultaRepository modeloConsulta;
     private final AlunoConsultaRepository alunoConsulta;
+    private final UsuarioRepository usuarioRepository;
 
     public AlertaRepositoryEmMemoria(MaterialConsultaRepository materialConsulta,
                                      ModeloBolsaConsultaRepository modeloConsulta,
-                                     AlunoConsultaRepository alunoConsulta) {
+                                     AlunoConsultaRepository alunoConsulta,
+                                     UsuarioRepository usuarioRepository) {
         this.materialConsulta = materialConsulta;
         this.modeloConsulta = modeloConsulta;
         this.alunoConsulta = alunoConsulta;
+        this.usuarioRepository = usuarioRepository;
     }
 
     @Override
@@ -65,6 +72,14 @@ public class AlertaRepositoryEmMemoria implements AlertaRepository {
             Severidade sev = aluno.getParcelasPendentes() >= 2 ? Severidade.ALTA : Severidade.MEDIA;
             String msg = "Aluna(o) " + aluno.getNome() + " com " + aluno.getParcelasPendentes() + " parcela(s) pendente(s)";
             ativos.add(new Alerta(TipoAlerta.PAGAMENTO, msg, sev));
+        }
+
+        // 4. Alertas dinâmicos de aniversário de funcionários
+        LocalDate hoje = LocalDate.now();
+        for (Usuario u : usuarioRepository.listarTodos()) {
+            if (u.aniversarioHoje(hoje)) {
+                ativos.add(new Alerta(TipoAlerta.ANIVERSARIO, "Hoje é aniversário de " + u.getNome() + " (" + u.getCargo() + ")!", Severidade.MEDIA));
+            }
         }
 
         return ativos;

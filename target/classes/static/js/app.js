@@ -29,5 +29,23 @@ document.addEventListener("DOMContentLoaded", () => {
     botaoEntrar.disabled = true;
     botaoEntrar.textContent = "Entrando...";
   });
+
+  // Abrir/fechar o dropdown de notificações do sino no topo
+  const botaoNotificacoes = document.querySelector("[data-toggle-notificacoes]");
+  const painelNotificacoes = document.getElementById("painel-notificacoes");
+  const containerNotificacoes = document.getElementById("container-notificacoes");
+
+  botaoNotificacoes?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    painelNotificacoes?.classList.toggle("hidden");
+  });
+
+  document.addEventListener("click", (e) => {
+    if (painelNotificacoes && !painelNotificacoes.classList.contains("hidden")) {
+      if (!containerNotificacoes?.contains(e.target)) {
+        painelNotificacoes.classList.add("hidden");
+      }
+    }
+  });
 });
 

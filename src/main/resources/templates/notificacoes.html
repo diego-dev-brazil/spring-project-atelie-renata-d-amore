@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head th:replace="~{fragments/layout :: head('Notificações')}"></head>
+<body class="font-sans antialiased">
+<div class="min-h-screen bg-[#e8f0ef] flex">
+
+    <th:block th:replace="~{fragments/layout :: sidebar}"></th:block>
+
+    <div class="flex-1 flex flex-col min-w-0">
+        <header th:replace="~{fragments/layout :: header('Notificações', 'Central de Avisos Importantes')}"></header>
+
+        <main class="flex-1 p-4 lg:p-6 overflow-y-auto">
+
+            <!-- Resumo por Categoria -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <a th:href="@{/notificacoes(categoria='TODAS')}"
+                   class="bg-white rounded-2xl p-5 shadow-sm flex items-center gap-4 border-2 transition-all hover:shadow-md"
+                   th:classappend="${categoriaSelecionada == 'TODAS'} ? 'border-[#2d6a6a]' : 'border-transparent'">
+                    <div class="w-12 h-12 rounded-xl bg-[#2d6a6a]/10 flex items-center justify-center text-[#2d6a6a]">
+                        <i data-lucide="bell-ring" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs text-gray-500">Total de Notificações</span>
+                        <p class="text-2xl font-bold text-gray-800" th:text="${totalNotificacoes}">0</p>
+                        <span class="text-[11px] font-medium text-red-600" th:text="${qtdUrgentes + ' urgente(s)'}">0 urgente(s)</span>
+                    </div>
+                </a>
+
+                <a th:href="@{/notificacoes(categoria='FALTA_MATERIAL')}"
+                   class="bg-white rounded-2xl p-5 shadow-sm flex items-center gap-4 border-2 transition-all hover:shadow-md"
+                   th:classappend="${categoriaSelecionada == 'FALTA_MATERIAL'} ? 'border-red-500' : 'border-transparent'">
+                    <div class="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center text-red-600">
+                        <i data-lucide="package-x" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs text-gray-500">Falta de Material</span>
+                        <p class="text-2xl font-bold text-red-600" th:text="${qtdFaltaMaterial}">0</p>
+                        <span class="text-[11px] text-gray-400">Estoque baixo & produção</span>
+                    </div>
+                </a>
+
+                <a th:href="@{/notificacoes(categoria='PAGAMENTO_ATRASADO')}"
+                   class="bg-white rounded-2xl p-5 shadow-sm flex items-center gap-4 border-2 transition-all hover:shadow-md"
+                   th:classappend="${categoriaSelecionada == 'PAGAMENTO_ATRASADO'} ? 'border-amber-500' : 'border-transparent'">
+                    <div class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600">
+                        <i data-lucide="credit-card" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs text-gray-500">Pagamento Atrasado</span>
+                        <p class="text-2xl font-bold text-amber-600" th:text="${qtdPagamentoAtrasado}">0</p>
+                        <span class="text-[11px] text-gray-400">Mensalidades de alunas(os)</span>
+                    </div>
+                </a>
+
+                <a th:href="@{/notificacoes(categoria='ANIVERSARIO_FUNCIONARIO')}"
+                   class="bg-white rounded-2xl p-5 shadow-sm flex items-center gap-4 border-2 transition-all hover:shadow-md"
+                   th:classappend="${categoriaSelecionada == 'ANIVERSARIO_FUNCIONARIO'} ? 'border-[#2d6a6a]' : 'border-transparent'">
+                    <div class="w-12 h-12 rounded-xl bg-teal-50 flex items-center justify-center text-[#2d6a6a]">
+                        <i data-lucide="cake" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs text-gray-500">Aniversários da Equipe</span>
+                        <p class="text-2xl font-bold text-[#2d6a6a]" th:text="${qtdAniversarios}">0</p>
+                        <span class="text-[11px] text-gray-400">Hoje e neste mês</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Abas de Filtro -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm mb-6 flex flex-wrap items-center justify-between gap-3">
+                <div class="flex flex-wrap gap-2">
+                    <a th:href="@{/notificacoes(categoria='TODAS')}"
+                       class="px-4 py-2 rounded-full text-xs font-semibold transition-colors"
+                       th:classappend="${categoriaSelecionada == 'TODAS'} ? 'bg-[#2d6a6a] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'">
+                        Todas (<span th:text="${totalNotificacoes}">0</span>)
+                    </a>
+                    <a th:href="@{/notificacoes(categoria='FALTA_MATERIAL')}"
+                       class="px-4 py-2 rounded-full text-xs font-semibold transition-colors flex items-center gap-1.5"
+                       th:classappend="${categoriaSelecionada == 'FALTA_MATERIAL'} ? 'bg-red-600 text-white' : 'bg-red-50 text-red-700 hover:bg-red-100'">
+                        <i data-lucide="package-x" class="w-3.5 h-3.5"></i>
+                        Falta de Material (<span th:text="${qtdFaltaMaterial}">0</span>)
+                    </a>
+                    <a th:href="@{/notificacoes(categoria='PAGAMENTO_ATRASADO')}"
+                       class="px-4 py-2 rounded-full text-xs font-semibold transition-colors flex items-center gap-1.5"
+                       th:classappend="${categoriaSelecionada == 'PAGAMENTO_ATRASADO'} ? 'bg-amber-600 text-white' : 'bg-amber-50 text-amber-800 hover:bg-amber-100'">
+                        <i data-lucide="credit-card" class="w-3.5 h-3.5"></i>
+                        Pagamento Atrasado (<span th:text="${qtdPagamentoAtrasado}">0</span>)
+                    </a>
+                    <a th:href="@{/notificacoes(categoria='ANIVERSARIO_FUNCIONARIO')}"
+                       class="px-4 py-2 rounded-full text-xs font-semibold transition-colors flex items-center gap-1.5"
+                       th:classappend="${categoriaSelecionada == 'ANIVERSARIO_FUNCIONARIO'} ? 'bg-[#2d6a6a] text-white' : 'bg-teal-50 text-[#2d6a6a] hover:bg-teal-100'">
+                        <i data-lucide="cake" class="w-3.5 h-3.5"></i>
+                        Aniversário de Funcionários (<span th:text="${qtdAniversarios}">0</span>)
+                    </a>
+                </div>
+                <span class="text-xs text-gray-400">Atualizado em tempo real a partir dos módulos do sistema</span>
+            </div>
+
+            <!-- Lista de Notificações -->
+            <div class="space-y-4">
+                <div th:if="${notificacoes.isEmpty()}" class="bg-white rounded-2xl p-10 text-center shadow-sm">
+                    <div class="w-14 h-14 mx-auto mb-3 rounded-full bg-green-50 text-green-600 flex items-center justify-center">
+                        <i data-lucide="check-circle-2" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-base font-semibold text-gray-800">Tudo em dia nesta categoria!</h3>
+                    <p class="text-xs text-gray-500 mt-1">Não há avisos pendentes para o filtro selecionado.</p>
+                </div>
+
+                <div th:each="notif : ${notificacoes}"
+                     class="bg-white rounded-2xl p-5 shadow-sm border-l-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:shadow-md transition-shadow"
+                     th:classappend="${notif.categoria.name() == 'FALTA_MATERIAL'} ? 'border-red-500' : (${notif.categoria.name() == 'PAGAMENTO_ATRASADO'} ? 'border-amber-500' : 'border-[#2d6a6a]')">
+
+                    <div class="flex items-start gap-4">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+                             th:classappend="${notif.categoria.classesBadge}">
+                            <i th:attr="data-lucide=${notif.categoria.icone}" class="w-5 h-5"></i>
+                        </div>
+
+                        <div>
+                            <div class="flex flex-wrap items-center gap-2 mb-1">
+                                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold"
+                                      th:classappend="${notif.categoria.classesBadge}"
+                                      th:text="${notif.categoria.descricao}">Categoria</span>
+                                <span th:if="${notif.urgente}"
+                                      class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-red-100 text-red-700">
+                                    <i data-lucide="flame" class="w-3 h-3"></i> Prioridade Alta
+                                </span>
+                            </div>
+
+                            <h3 class="text-base font-bold text-gray-800" th:text="${notif.titulo}">Título da Notificação</h3>
+                            <p class="text-sm text-gray-600 mt-0.5" th:text="${notif.mensagem}">Mensagem detalhada</p>
+                            <p class="text-xs text-gray-400 mt-1.5" th:text="${notif.detalhe}">Detalhe</p>
+                        </div>
+                    </div>
+
+                    <div class="flex-shrink-0">
+                        <a th:href="@{${notif.linkDestino}}"
+                           class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold bg-[#2d6a6a] text-white hover:bg-[#245858] transition-colors shadow-sm">
+                            <span th:text="${notif.textoAcao}">Resolver</span>
+                            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+</div>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>
+

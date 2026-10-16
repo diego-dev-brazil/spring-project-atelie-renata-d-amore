@@ -71,7 +71,15 @@ O `DashboardService` recebe no construtor um `List<IndicadorDashboard>` injetado
 **Por que isso respeita o OCP?**
 Se amanhã a proprietária pedir um **7º cartão** no Dashboard (por exemplo, *"Ordens em Andamento"*), basta criar uma nova classe `OrdensEmAndamentoIndicador implements IndicadorDashboard` anotada com `@Component`. **Zero linhas** do `DashboardService`, do `DashboardController` ou do `dashboard.html` precisam ser modificadas!
 
-#### Exemplo 2: Filtro de Permissões no Menu (`ItemMenu`)
+#### Exemplo 2: Central de Notificações Plugável (`ProvedorNotificacao`)
+No pacote `application.notificacoes`, cada tipo de aviso importante do sistema implementa a interface `ProvedorNotificacao`:
+* `FaltaMaterialNotificacaoProvedor` (avisos de estoque baixo e modelos travados na produção)
+* `PagamentoAtrasadoNotificacaoProvedor` (avisos de alunas com parcelas em atraso)
+* `AniversarioFuncionarioNotificacaoProvedor` (avisos de aniversariantes do dia e do mês na equipe)
+
+O `NotificacaoService` recebe `List<ProvedorNotificacao>` por injeção de dependência e agrega todas as mensagens automaticamente tanto no sino do cabeçalho quanto na aba `/notificacoes`. Para criar um novo tipo de notificação no futuro, basta criar uma nova classe `@Component implements ProvedorNotificacao` sem alterar o `NotificacaoService`.
+
+#### Exemplo 3: Filtro de Permissões no Menu (`ItemMenu`)
 Em vez de um `if (userRole == "admin")` espalhado pelo código, cada `ItemMenu` possui um `Set<Perfil> perfisPermitidos`:
 
 ```java

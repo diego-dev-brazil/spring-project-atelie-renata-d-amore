@@ -7,6 +7,7 @@ import br.com.atelie.domain.repository.UsuarioRepository;
 import br.com.atelie.domain.seguranca.CodificadorSenha;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -16,11 +17,6 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Usuários guardados em memória.
  * Implementa leitura ({@link UsuarioRepository}) e escrita ({@link UsuarioComandoRepository}).
- *
- * Usuários iniciais:
- *   admin       / admin123  -> Administradora
- *   funcionaria / func123   -> Funcionária (Costureira Sênior)
- *   beatriz     / bia123    -> Funcionária (Auxiliar de Produção)
  */
 @Repository
 public class UsuarioRepositoryEmMemoria implements UsuarioRepository, UsuarioComandoRepository {
@@ -28,10 +24,15 @@ public class UsuarioRepositoryEmMemoria implements UsuarioRepository, UsuarioCom
     private final Map<String, Usuario> usuarios = new ConcurrentHashMap<>();
 
     public UsuarioRepositoryEmMemoria(CodificadorSenha codificador) {
-        salvar(new Usuario("admin", "Renata D'Amore", "Proprietária & Diretora Criativa", codificador.codificar("admin123"), Perfil.ADMIN, true));
-        salvar(new Usuario("funcionaria", "Camila Souza", "Costureira Sênior", codificador.codificar("func123"), Perfil.FUNCIONARIO, true));
-        salvar(new Usuario("beatriz", "Beatriz Martins", "Atendimento & Vendas", codificador.codificar("bia123"), Perfil.FUNCIONARIO, true));
-        salvar(new Usuario("juliana", "Juliana Rocha", "Auxiliar de Corte (Férias/Inativa)", codificador.codificar("ju123"), Perfil.FUNCIONARIO, false));
+        LocalDate hoje = LocalDate.now();
+        salvar(new Usuario("admin", "Renata D'Amore", "Proprietária & Diretora Criativa",
+                codificador.codificar("admin123"), Perfil.ADMIN, true, LocalDate.of(1985, 4, 12)));
+        salvar(new Usuario("funcionaria", "Camila Souza", "Costureira Sênior",
+                codificador.codificar("func123"), Perfil.FUNCIONARIO, true, LocalDate.of(1994, hoje.getMonthValue(), hoje.getDayOfMonth())));
+        salvar(new Usuario("beatriz", "Beatriz Martins", "Atendimento & Vendas",
+                codificador.codificar("bia123"), Perfil.FUNCIONARIO, true, LocalDate.of(1998, hoje.getMonthValue(), Math.min(28, hoje.getDayOfMonth() + 2))));
+        salvar(new Usuario("juliana", "Juliana Rocha", "Auxiliar de Corte (Férias/Inativa)",
+                codificador.codificar("ju123"), Perfil.FUNCIONARIO, false, LocalDate.of(1996, 11, 20)));
     }
 
     @Override

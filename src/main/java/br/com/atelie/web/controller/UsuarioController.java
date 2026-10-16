@@ -5,14 +5,16 @@ import br.com.atelie.application.usuarios.UsuarioService;
 import br.com.atelie.domain.model.Perfil;
 import br.com.atelie.web.sessao.SessaoUsuario;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
+
 /**
  * Controller para o gerenciamento de Usuários e Funcionários (exclusivo Admin).
- * Permite cadastrar funcionários, editar cargos/senhas e controlar quem entra ou sai (ativar/bloquear acesso).
  */
 @Controller
 @RequestMapping("/usuarios")
@@ -44,9 +46,10 @@ public class UsuarioController {
                             @RequestParam String cargo,
                             @RequestParam String senha,
                             @RequestParam Perfil perfil,
+                            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataNascimento,
                             RedirectAttributes redirectAttributes) {
         try {
-            usuarioService.cadastrarNovo(login, nome, cargo, senha, perfil);
+            usuarioService.cadastrarNovo(login, nome, cargo, senha, perfil, dataNascimento);
             redirectAttributes.addFlashAttribute("sucesso", "Funcionário(a) '" + nome + "' cadastrado(a) com acesso liberado!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("erro", e.getMessage());
@@ -61,11 +64,12 @@ public class UsuarioController {
                             @RequestParam(required = false) String novaSenha,
                             @RequestParam Perfil perfil,
                             @RequestParam(defaultValue = "false") boolean ativo,
+                            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataNascimento,
                             HttpSession sessao,
                             RedirectAttributes redirectAttributes) {
         try {
             String loginLogado = sessaoUsuario.usuarioAtual(sessao).map(UsuarioLogado::login).orElse("");
-            usuarioService.atualizar(login, nome, cargo, novaSenha, perfil, ativo, loginLogado);
+            usuarioService.atualizar(login, nome, cargo, novaSenha, perfil, ativo, dataNascimento, loginLogado);
             redirectAttributes.addFlashAttribute("sucesso", "Dados e permissões de '" + nome + "' atualizados!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("erro", e.getMessage());
@@ -101,4 +105,3 @@ public class UsuarioController {
         return "redirect:/usuarios";
     }
 }
-

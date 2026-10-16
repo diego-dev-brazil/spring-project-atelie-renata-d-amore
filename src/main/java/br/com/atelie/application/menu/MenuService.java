@@ -20,6 +20,7 @@ public class MenuService {
 
     private final List<ItemMenu> itens = List.of(
             ItemMenu.paraTodos("Dashboard", "/dashboard", "layout-dashboard"),
+            ItemMenu.paraTodos("Notificações", "/notificacoes", "bell"),
             ItemMenu.paraTodos("Estoque e Materiais", "/estoque", "package"),
             ItemMenu.paraTodos("Modelos de Bolsas", "/modelos", "shopping-bag"),
             ItemMenu.paraTodos("Produção", "/producao", "factory"),

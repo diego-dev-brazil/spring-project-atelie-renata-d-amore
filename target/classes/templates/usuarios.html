@@ -54,7 +54,7 @@
 
                 <form th:action="@{/usuarios/atualizar}" method="post" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-3">
                     <input type="hidden" name="login" th:value="${usuarioEmEdicao.login}">
-                    <div class="lg:col-span-2">
+                    <div>
                         <label class="block text-xs text-gray-600 mb-1">Nome Completo</label>
                         <input type="text" name="nome" th:value="${usuarioEmEdicao.nome}" required
                                class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm">
@@ -62,6 +62,11 @@
                     <div>
                         <label class="block text-xs text-gray-600 mb-1">Cargo / Função</label>
                         <input type="text" name="cargo" th:value="${usuarioEmEdicao.cargo}" required
+                               class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-600 mb-1">Data de Nascimento</label>
+                        <input type="date" name="dataNascimento" th:value="${usuarioEmEdicao.dataNascimento}"
                                class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm">
                     </div>
                     <div>
@@ -100,6 +105,7 @@
                             <th class="py-3 px-4">Nome</th>
                             <th class="py-3 px-4">Login de Acesso</th>
                             <th class="py-3 px-4">Cargo</th>
+                            <th class="py-3 px-4">Aniversário</th>
                             <th class="py-3 px-4">Perfil</th>
                             <th class="py-3 px-4">Status de Entrada</th>
                             <th class="py-3 px-4 text-right">Ações</th>
@@ -110,6 +116,12 @@
                             <td class="py-3 px-4 font-medium text-gray-800" th:text="${u.nome}">Renata</td>
                             <td class="py-3 px-4 font-mono text-xs text-gray-600" th:text="${u.login}">admin</td>
                             <td class="py-3 px-4 text-gray-600" th:text="${u.cargo}">Costureira</td>
+                            <td class="py-3 px-4 text-gray-600 text-xs">
+                                <span th:if="${u.dataNascimento != null}"
+                                      class="inline-flex items-center gap-1"
+                                      th:text="${#temporals.format(u.dataNascimento, 'dd/MM/yyyy')}">01/01/1990</span>
+                                <span th:if="${u.dataNascimento == null}" class="text-gray-400">—</span>
+                            </td>
                             <td class="py-3 px-4">
                                 <span class="px-2.5 py-1 rounded-full text-xs font-medium"
                                       th:classappend="${u.admin} ? 'bg-[#2d6a6a]/15 text-[#2d6a6a]' : 'bg-gray-100 text-gray-700'"
@@ -166,10 +178,17 @@
                     </div>
 
                     <form th:action="@{/usuarios/novo}" method="post" class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-600 mb-1">Nome Completo *</label>
-                            <input type="text" name="nome" placeholder="Ex: Daniela Prado" required
-                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">Nome Completo *</label>
+                                <input type="text" name="nome" placeholder="Ex: Daniela Prado" required
+                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">Data de Nascimento</label>
+                                <input type="date" name="dataNascimento"
+                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm">
+                            </div>
                         </div>
                         <div class="grid grid-cols-2 gap-3">
                             <div>
