@@ -1,0 +1,6 @@
+br/com/atelie/web/FluxoLoginDashboardTest.class
+br/com/atelie/application/autenticacao/AutenticacaoServiceTest.class
+br/com/atelie/application/menu/MenuServiceTest.class
+br/com/atelie/application/dashboard/DashboardServiceTest.class
+br/com/atelie/application/dashboard/DashboardServiceTest$2.class
+br/com/atelie/application/dashboard/DashboardServiceTest$1.class

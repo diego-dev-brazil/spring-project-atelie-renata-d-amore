@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head th:replace="~{fragments/layout :: head('Login')}"></head>
+<body class="font-sans antialiased">
+<div class="min-h-screen flex flex-col bg-[#c5dbd9]">
+    <header class="bg-[#2d6a6a] py-4 md:py-6 px-4 text-center">
+        <h1 class="text-white text-2xl md:text-4xl font-serif italic">Ateliê Renata D'Amore</h1>
+    </header>
+
+    <main class="flex-1 flex items-center justify-center relative overflow-hidden px-4 py-8">
+        <!-- Listras decorativas -->
+        <div class="hidden md:flex absolute left-0 top-0 bottom-0 w-32 lg:w-48 gap-3 lg:gap-4 pl-4">
+            <div class="w-4 lg:w-6 bg-[#2d6a6a]/70 h-full"></div>
+            <div class="w-4 lg:w-6 bg-[#2d6a6a]/70 h-full"></div>
+            <div class="w-4 lg:w-6 bg-[#2d6a6a]/70 h-full"></div>
+        </div>
+        <div class="hidden md:flex absolute right-0 top-0 bottom-0 w-32 lg:w-48 gap-3 lg:gap-4 pr-4 justify-end">
+            <div class="w-4 lg:w-6 bg-[#2d6a6a]/70 h-full"></div>
+            <div class="w-4 lg:w-6 bg-[#2d6a6a]/70 h-full"></div>
+            <div class="w-4 lg:w-6 bg-[#2d6a6a]/70 h-full"></div>
+        </div>
+
+        <div class="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16 lg:gap-24 w-full max-w-5xl z-10">
+            <!-- Logo -->
+            <div class="flex flex-col items-center text-[#2d6a6a]">
+                <div class="relative w-40 h-40 md:w-52 md:h-52 lg:w-64 lg:h-64 flex items-center justify-center">
+                    <svg viewBox="0 0 200 200" class="w-full h-full">
+                        <text x="50" y="130" class="fill-[#2d6a6a]/40" style="font-size:120px;font-family:serif;font-style:italic">R</text>
+                        <text x="90" y="150" class="fill-[#2d6a6a]/40" style="font-size:100px;font-family:serif;font-style:italic">D</text>
+                        <line x1="85" y1="30" x2="130" y2="170" stroke="#555" stroke-width="2"/>
+                        <ellipse cx="85" cy="35" rx="4" ry="8" fill="#555"/>
+                        <circle cx="85" cy="35" r="2" fill="#c5dbd9"/>
+                    </svg>
+                </div>
+                <div class="text-center mt-2">
+                    <p class="text-xs tracking-[0.3em] font-light">ATELIÊ</p>
+                    <p class="text-xl md:text-2xl font-serif italic">Renata D'Amore</p>
+                </div>
+            </div>
+
+            <!-- Cartão de login -->
+            <div class="bg-white rounded-2xl shadow-lg p-8 md:p-10 w-full max-w-sm">
+                <div class="flex justify-center mb-8 text-[#2d6a6a]">
+                    <i data-lucide="user" class="w-16 h-16" stroke-width="1.5"></i>
+                </div>
+
+                <div th:if="${erro}" class="mb-4 p-3 rounded-lg text-sm bg-red-50 text-red-700 border-l-4 border-red-500"
+                     th:text="${erro}" role="alert">Erro</div>
+
+                <form th:action="@{/login}" method="post" class="space-y-4" id="form-login">
+                    <input type="text" name="usuario" placeholder="Digite seu usuário" required autofocus
+                           th:value="${usuarioDigitado}" autocomplete="username" aria-label="Usuário"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-full text-center text-gray-600 placeholder-gray-400 focus:outline-none focus:border-[#2d6a6a] transition-colors">
+                    <input type="password" name="senha" placeholder="Digite sua senha" required
+                           autocomplete="current-password" aria-label="Senha"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-full text-center text-gray-600 placeholder-gray-400 focus:outline-none focus:border-[#2d6a6a] transition-colors">
+
+                    <div class="text-left pl-2">
+                        <a href="#" class="text-[#2d6a6a] text-sm hover:underline font-medium">Esqueci minha senha</a>
+                    </div>
+
+                    <button type="submit" id="botao-entrar"
+                            class="w-full bg-[#2d6a6a] text-white py-3 rounded-full text-lg font-medium hover:bg-[#245858] hover:scale-105 transition-all mt-4 disabled:opacity-70 disabled:cursor-not-allowed">
+                        Enviar
+                    </button>
+                </form>
+
+                <p class="mt-6 text-xs text-gray-400 text-center">
+                    Demo: <strong>admin</strong>/admin123 ou <strong>funcionaria</strong>/func123
+                </p>
+            </div>
+        </div>
+    </main>
+</div>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>
+

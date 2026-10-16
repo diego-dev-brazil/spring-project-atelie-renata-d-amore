@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head th:replace="~{fragments/layout :: head('Configurações')}"></head>
+<body class="font-sans antialiased">
+<div class="min-h-screen bg-[#e8f0ef] flex">
+
+    <th:block th:replace="~{fragments/layout :: sidebar}"></th:block>
+
+    <div class="flex-1 flex flex-col min-w-0">
+        <header th:replace="~{fragments/layout :: header('Administração', 'Configurações do Sistema')}"></header>
+
+        <main class="flex-1 p-4 lg:p-6 overflow-y-auto">
+
+            <div th:if="${sucesso}" class="mb-4 p-4 rounded-xl text-sm bg-green-50 text-green-700 border-l-4 border-green-500 shadow-sm">
+                <span th:text="${sucesso}">Sucesso</span>
+            </div>
+
+            <div class="bg-white rounded-2xl p-6 shadow-sm max-w-3xl">
+                <h2 class="text-xl font-bold text-gray-800 mb-1">Dados & Parâmetros do Ateliê</h2>
+                <p class="text-xs text-gray-500 mb-6">Configure as informações institucionais e metas financeiras do Ateliê Renata D'Amore.</p>
+
+                <form th:action="@{/configuracoes/salvar}" method="post" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">Nome do Ateliê</label>
+                            <input type="text" name="nomeAtelie" th:value="${config.nomeAtelie}" required
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">Responsável / Proprietária</label>
+                            <input type="text" name="proprietaria" th:value="${config.proprietaria}" required
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">CNPJ</label>
+                            <input type="text" name="cnpj" th:value="${config.cnpj}" required
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">Telefone</label>
+                            <input type="text" name="telefone" th:value="${config.telefone}" required
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">Meta de Vendas Mensal (R$)</label>
+                            <input type="number" step="0.01" name="metaVendasMensal" th:value="${config.metaVendasMensal}" required
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">E-mail de Contato</label>
+                            <input type="email" name="emailContato" th:value="${config.emailContato}" required
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">Endereço Físico</label>
+                            <input type="text" name="endereco" th:value="${config.endereco}" required
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm">
+                        </div>
+                    </div>
+
+                    <div class="pt-2">
+                        <label class="inline-flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+                            <input type="checkbox" name="alertasEstoqueAtivos" value="true" th:checked="${config.alertasEstoqueAtivos}">
+                            <span>Exibir alertas automáticos de estoque mínimo e produção bloqueada no Dashboard</span>
+                        </label>
+                    </div>
+
+                    <div class="flex justify-end pt-4 border-t border-gray-100">
+                        <button type="submit" class="px-6 py-2.5 bg-[#2d6a6a] text-white rounded-full text-sm font-medium hover:bg-[#245858] transition-all">
+                            Salvar Configurações
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </main>
+    </div>
+</div>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>
+

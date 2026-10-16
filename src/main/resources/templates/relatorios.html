@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head th:replace="~{fragments/layout :: head('Relatórios Gerenciais')}"></head>
+<body class="font-sans antialiased">
+<div class="min-h-screen bg-[#e8f0ef] flex">
+
+    <th:block th:replace="~{fragments/layout :: sidebar}"></th:block>
+
+    <div class="flex-1 flex flex-col min-w-0">
+        <header th:replace="~{fragments/layout :: header('Administração', 'Relatórios Consolidados')}"></header>
+
+        <main class="flex-1 p-4 lg:p-6 overflow-y-auto">
+
+            <div class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+                <h2 class="text-xl font-bold text-gray-800">Balanço Geral do Ateliê</h2>
+                <p class="text-xs text-gray-500 mt-1">Visão consolidada em tempo real integrando Estoque, Produção, Catálogo, Vendas e Cursos.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <div class="bg-white rounded-2xl p-5 shadow-sm">
+                    <span class="text-xs text-gray-500">Faturamento Acumulado (Semestre)</span>
+                    <p class="text-2xl font-bold text-[#2d6a6a] mt-1" th:text="${faturamentoSemestral}">R$ 0,00</p>
+                </div>
+                <div class="bg-white rounded-2xl p-5 shadow-sm">
+                    <span class="text-xs text-gray-500">Valor Patrimonial em Estoque</span>
+                    <p class="text-2xl font-bold text-gray-800 mt-1" th:text="${valorEstoque}">R$ 0,00</p>
+                </div>
+                <div class="bg-white rounded-2xl p-5 shadow-sm">
+                    <span class="text-xs text-gray-500">Receita Potencial de Turmas/Mês</span>
+                    <p class="text-2xl font-bold text-gray-800 mt-1" th:text="${receitaTurmas}">R$ 0,00</p>
+                </div>
+                <div class="bg-white rounded-2xl p-5 shadow-sm">
+                    <span class="text-xs text-gray-500">Peças Produzidas (Concluídas)</span>
+                    <p class="text-2xl font-bold text-gray-800 mt-1" th:text="${pecasProduzidas} + ' peças'">0 peças</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="bg-white rounded-2xl p-6 shadow-sm">
+                    <h3 class="text-base font-bold text-gray-800 mb-4">Evolução de Faturamento Mensal</h3>
+                    <table class="w-full text-left text-sm">
+                        <thead>
+                        <tr class="border-b border-gray-100 text-xs text-gray-500 uppercase">
+                            <th class="py-2">Mês</th>
+                            <th class="py-2 text-right">Total Faturado</th>
+                        </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-50">
+                        <tr th:each="item : ${historicoVendas}">
+                            <td class="py-2.5 font-medium text-gray-700" th:text="${item.mes}">Jan</td>
+                            <td class="py-2.5 text-right font-semibold text-[#2d6a6a]" th:text="${formatadorMoeda.formatar(item.total)}">R$ 0,00</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 shadow-sm space-y-4">
+                    <h3 class="text-base font-bold text-gray-800">Indicadores Operacionais</h3>
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                        <span class="text-sm text-gray-600">Modelos ativos no catálogo</span>
+                        <span class="font-bold text-gray-800" th:text="${totalModelosCatalogo}">4</span>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-amber-50 rounded-xl">
+                        <span class="text-sm text-amber-800">Materiais com estoque crítico</span>
+                        <span class="font-bold text-amber-800" th:text="${totalMateriaisCriticos}">3</span>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-red-50 rounded-xl">
+                        <span class="text-sm text-red-800">Alunos com mensalidade pendente</span>
+                        <span class="font-bold text-red-800" th:text="${totalInadimplentes}">2</span>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+</div>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>
+

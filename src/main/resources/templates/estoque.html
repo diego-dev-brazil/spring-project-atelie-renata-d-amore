@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head th:replace="~{fragments/layout :: head('Estoque e Materiais')}"></head>
+<body class="font-sans antialiased">
+<div class="min-h-screen bg-[#e8f0ef] flex">
+
+    <!-- Menu Lateral Compartilhado -->
+    <th:block th:replace="~{fragments/layout :: sidebar}"></th:block>
+
+    <!-- Conteúdo Principal -->
+    <div class="flex-1 flex flex-col min-w-0">
+        <header th:replace="~{fragments/layout :: header('Estoque', 'Gerenciamento de Materiais')}"></header>
+
+        <main class="flex-1 p-4 lg:p-6 overflow-y-auto">
+
+            <!-- Mensagens de Feedback (Sucesso ou Erro) -->
+            <div th:if="${sucesso}" class="mb-4 p-4 rounded-xl text-sm bg-green-50 text-green-700 border-l-4 border-green-500 flex items-center justify-between shadow-sm">
+                <span th:text="${sucesso}">Operação realizada com sucesso!</span>
+            </div>
+            <div th:if="${erro}" class="mb-4 p-4 rounded-xl text-sm bg-red-50 text-red-700 border-l-4 border-red-500 flex items-center justify-between shadow-sm">
+                <span th:text="${erro}">Ocorreu um erro.</span>
+            </div>
+
+            <!-- Cabeçalho do Módulo & Resumo -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="bg-white rounded-2xl p-5 shadow-sm md:col-span-2 flex items-center justify-between">
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">Estoque de Materiais & Insumos</h2>
+                        <p class="text-xs text-gray-500 mt-1">Cadastre, edite quantidades e acompanhe itens em alerta de estoque mínimo.</p>
+                    </div>
+                    <button type="button" onclick="document.getElementById('modal-material').classList.remove('hidden')"
+                            class="flex items-center gap-2 px-4 py-2.5 bg-[#2d6a6a] text-white rounded-full text-sm font-medium hover:bg-[#245858] hover:scale-105 transition-all shadow-sm">
+                        <i data-lucide="plus" class="w-4 h-4"></i> Novo Material
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-[#2d6a6a]/10 flex items-center justify-center text-[#2d6a6a]">
+                        <i data-lucide="package" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs text-gray-500">Total de Unidades / Insumos</span>
+                        <p class="text-2xl font-bold text-gray-800" th:text="${totalItens}">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulário Embutido de Edição (se estiver no modo de edição) -->
+            <div th:if="${materialEmEdicao}" class="bg-amber-50/70 border border-amber-200 rounded-2xl p-6 mb-6 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-base font-semibold text-gray-800 flex items-center gap-2">
+                        <i data-lucide="pencil" class="w-4 h-4 text-amber-600"></i> Editando Material:
+                        <span class="text-[#2d6a6a]" th:text="${materialEmEdicao.nome}">Nome</span>
+                    </h3>
+                    <a th:href="@{/estoque}" class="text-xs text-gray-500 hover:text-gray-700 underline">Cancelar Edição</a>
+                </div>
+                <form th:action="@{/estoque/salvar}" method="post" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-3">
+                    <input type="hidden" name="id" th:value="${materialEmEdicao.id}">
+                    <div class="lg:col-span-2">
+                        <label class="block text-xs text-gray-600 mb-1">Nome do Material</label>
+                        <input type="text" name="nome" th:value="${materialEmEdicao.nome}" required
+                               class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-[#2d6a6a]">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-600 mb-1">Categoria</label>
+                        <input type="text" name="categoria" th:value="${materialEmEdicao.categoria}" required
+                               class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-[#2d6a6a]">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-600 mb-1">Qtd Atual</label>
+                        <input type="number" name="quantidade" th:value="${materialEmEdicao.quantidade}" min="0" required
+                               class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-[#2d6a6a]">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-600 mb-1">Qtd Mínima</label>
+                        <input type="number" name="quantidadeMinima" th:value="${materialEmEdicao.quantidadeMinima}" min="0" required
+                               class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-[#2d6a6a]">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-600 mb-1">Unidade</label>
+                        <input type="text" name="unidadeMedida" th:value="${materialEmEdicao.unidadeMedida}" placeholder="un, metros..." required
+                               class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-[#2d6a6a]">
+                    </div>
+                    <div class="lg:col-span-6 flex justify-end gap-2 mt-2">
+                        <a th:href="@{/estoque}" class="px-4 py-2 bg-gray-200 text-gray-700 text-xs rounded-lg hover:bg-gray-300">Cancelar</a>
+                        <button type="submit" class="px-5 py-2 bg-[#2d6a6a] text-white text-xs font-semibold rounded-lg hover:bg-[#245858]">Salvar Alterações</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Tabela Principal de Materiais -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">Lista de Materiais Cadastrados</h3>
+                    <span class="text-xs text-gray-400" th:text="${materiais.size()} + ' materiais listados'">10 materiais listados</span>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                        <tr class="border-b border-gray-100 text-xs font-semibold text-gray-500 uppercase">
+                            <th class="py-3 px-4">Nome</th>
+                            <th class="py-3 px-4">Categoria</th>
+                            <th class="py-3 px-4">Quantidade</th>
+                            <th class="py-3 px-4">Estoque Mínimo</th>
+                            <th class="py-3 px-4">Status</th>
+                            <th class="py-3 px-4 text-right">Ações</th>
+                        </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-50 text-sm">
+                        <tr th:each="m : ${materiais}" class="hover:bg-gray-50 transition-colors">
+                            <td class="py-3 px-4">
+                                <span class="font-medium text-gray-800" th:text="${m.nome}">Tecido Oxford</span>
+                            </td>
+                            <td class="py-3 px-4">
+                                <span class="px-2.5 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-medium" th:text="${m.categoria}">Tecidos</span>
+                            </td>
+                            <td class="py-3 px-4 font-semibold text-gray-700">
+                                <span th:text="${m.quantidade}">15</span>
+                                <span class="text-xs font-normal text-gray-400" th:text="${m.unidadeMedida}">metros</span>
+                            </td>
+                            <td class="py-3 px-4 text-gray-500">
+                                <span th:text="${m.quantidadeMinima}">20</span>
+                                <span class="text-xs text-gray-400" th:text="${m.unidadeMedida}">metros</span>
+                            </td>
+                            <td class="py-3 px-4">
+                                <span th:if="${m.estoqueBaixo}" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-red-50 text-red-700 border border-red-200">
+                                    <i data-lucide="triangle-alert" class="w-3 h-3"></i> Estoque Baixo
+                                </span>
+                                <span th:unless="${m.estoqueBaixo}" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700 border border-green-200">
+                                    <i data-lucide="check" class="w-3 h-3"></i> Normal
+                                </span>
+                            </td>
+                            <td class="py-3 px-4 text-right space-x-2">
+                                <a th:href="@{/estoque(editar=${m.id})}"
+                                   class="inline-flex items-center justify-center p-2 rounded-lg text-gray-600 hover:text-[#2d6a6a] hover:bg-gray-100 transition-colors"
+                                   title="Editar material">
+                                    <i data-lucide="pencil" class="w-4 h-4"></i>
+                                </a>
+                                <form th:action="@{'/estoque/excluir/' + ${m.id}}" method="post" class="inline"
+                                      onsubmit="return confirm('Tem certeza que deseja remover este material do estoque?');">
+                                    <button type="submit"
+                                            class="inline-flex items-center justify-center p-2 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                                            title="Excluir material">
+                                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(materiais)}">
+                            <td colspan="6" class="py-8 text-center text-gray-400">Nenhum material cadastrado no estoque.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Modal para Adicionar Novo Material -->
+            <div id="modal-material" class="fixed inset-0 z-50 bg-black/50 flex items-center justify-center hidden p-4">
+                <div class="bg-white rounded-2xl p-6 w-full max-w-lg shadow-xl relative">
+                    <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
+                        <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+                            <i data-lucide="package-plus" class="w-5 h-5 text-[#2d6a6a]"></i> Novo Material de Estoque
+                        </h3>
+                        <button type="button" onclick="document.getElementById('modal-material').classList.add('hidden')" class="p-1 hover:bg-gray-100 rounded-lg">
+                            <i data-lucide="x" class="w-5 h-5 text-gray-500"></i>
+                        </button>
+                    </div>
+
+                    <form th:action="@{/estoque/salvar}" method="post" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">Nome do Material / Insumo *</label>
+                            <input type="text" name="nome" placeholder="Ex: Tecido Oxford Azul" required
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-[#2d6a6a]">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">Categoria *</label>
+                                <input type="text" name="categoria" placeholder="Ex: Tecidos, Aviamentos" required
+                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-[#2d6a6a]">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">Unidade de Medida</label>
+                                <input type="text" name="unidadeMedida" placeholder="Ex: metros, un, kg" value="un"
+                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-[#2d6a6a]">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">Quantidade Inicial *</label>
+                                <input type="number" name="quantidade" min="0" value="0" required
+                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-[#2d6a6a]">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">Estoque Mínimo (Alerta) *</label>
+                                <input type="number" name="quantidadeMinima" min="0" value="10" required
+                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-[#2d6a6a]">
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
+                            <button type="button" onclick="document.getElementById('modal-material').classList.add('hidden')"
+                                    class="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-full text-sm font-medium hover:bg-gray-200 transition-all">
+                                Cancelar
+                            </button>
+                            <button type="submit"
+                                    class="px-6 py-2.5 bg-[#2d6a6a] text-white rounded-full text-sm font-medium hover:bg-[#245858] transition-all">
+                                Cadastrar Material
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </main>
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>
+

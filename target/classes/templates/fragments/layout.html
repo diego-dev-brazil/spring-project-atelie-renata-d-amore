@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<!--
+  Fragmentos reaproveitados por todas as páginas internas.
+  No React isso seria um componente de layout; no Thymeleaf usamos th:fragment.
+-->
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+
+<head th:fragment="head(titulo)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${titulo} + ' | Ateliê Renata D\'Amore'">Ateliê</title>
+    <!-- Tailwind via CDN: permite reaproveitar as mesmas classes do projeto React -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Ícones Lucide (os mesmos do lucide-react) -->
+    <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+
+<body>
+
+<!-- ===================== MENU LATERAL ===================== -->
+<th:block th:fragment="sidebar">
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden" data-fechar-menu></div>
+
+    <aside id="sidebar"
+           class="fixed lg:static inset-y-0 left-0 z-50 w-64 bg-[#2d6a6a] text-white transform transition-transform duration-300 ease-in-out -translate-x-full lg:translate-x-0">
+        <div class="p-4 border-b border-white/20">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                        <span class="text-lg font-serif italic">R</span>
+                    </div>
+                    <div>
+                        <h2 class="font-serif italic text-lg">Ateliê</h2>
+                        <p class="text-xs text-white/70">Renata D'Amore</p>
+                    </div>
+                </div>
+                <button type="button" class="lg:hidden p-1 hover:bg-white/10 rounded" data-fechar-menu aria-label="Fechar menu">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="px-4 py-3 border-b border-white/20">
+            <p class="text-xs text-white/60 mb-1">Perfil de acesso:</p>
+            <span class="inline-block px-3 py-1 text-xs rounded-full bg-white text-[#2d6a6a] font-medium"
+                  th:text="${usuarioLogado.perfil.descricao}">Administradora</span>
+        </div>
+
+        <nav class="p-4 space-y-1 overflow-y-auto max-h-[calc(100vh-180px)]">
+            <a th:each="item : ${menu}"
+               th:href="@{${item.caminho}}"
+               class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors"
+               th:classappend="${item.caminho == caminhoAtual} ? 'bg-white/20 text-white' : 'text-white/80 hover:bg-white/10 hover:text-white'">
+                <i th:attr="data-lucide=${item.icone}" class="w-5 h-5"></i>
+                <span class="text-sm font-medium" th:text="${item.rotulo}">Item</span>
+            </a>
+        </nav>
+    </aside>
+</th:block>
+
+<!-- ===================== CABEÇALHO ===================== -->
+<header th:fragment="header(secao, subsecao)" class="bg-white shadow-sm sticky top-0 z-30">
+    <div class="flex items-center justify-between px-4 lg:px-6 py-4">
+        <div class="flex items-center gap-4">
+            <button type="button" class="lg:hidden p-2 hover:bg-gray-100 rounded-lg" data-abrir-menu aria-label="Abrir menu">
+                <i data-lucide="menu" class="w-6 h-6 text-[#2d6a6a]"></i>
+            </button>
+            <nav class="hidden sm:flex items-center gap-2 text-sm text-gray-500">
+                <span class="text-[#2d6a6a] font-medium" th:text="${secao}">Dashboard</span>
+                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                <span th:text="${subsecao}">Visão Geral</span>
+            </nav>
+        </div>
+
+        <div class="hidden md:flex flex-1 max-w-md mx-4">
+            <div class="relative w-full">
+                <i data-lucide="search" class="w-[18px] h-[18px] absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                <input type="text" placeholder="Buscar produtos, alunos, materiais..."
+                       class="w-full pl-10 pr-4 py-2 bg-gray-100 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6a6a]/30">
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <button type="button" class="relative p-2 hover:bg-gray-100 rounded-full" aria-label="Notificações">
+                <i data-lucide="bell" class="w-5 h-5 text-gray-600"></i>
+                <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            </button>
+            <div class="hidden sm:flex items-center gap-3 pl-3 border-l border-gray-200">
+                <div class="text-right">
+                    <p class="text-sm font-medium text-gray-800" th:text="${usuarioLogado.nome}">Nome</p>
+                    <p class="text-xs text-gray-500" th:text="${usuarioLogado.perfil.descricao}">Perfil</p>
+                </div>
+                <div class="w-10 h-10 bg-[#2d6a6a] rounded-full flex items-center justify-center text-white font-serif italic"
+                     th:text="${usuarioLogado.iniciais}">R</div>
+            </div>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="p-2 hover:bg-gray-100 rounded-full" title="Sair" aria-label="Sair">
+                    <i data-lucide="log-out" class="w-5 h-5 text-gray-600"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</header>
+
+<!-- ===================== SCRIPTS ===================== -->
+<th:block th:fragment="scripts">
+    <script th:src="@{/js/app.js}"></script>
+</th:block>
+
+</body>
+</html>

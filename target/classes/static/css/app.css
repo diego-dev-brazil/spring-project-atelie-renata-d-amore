@@ -1,0 +1,5 @@
+/* Ajustes que não vêm do Tailwind */
+body {
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+

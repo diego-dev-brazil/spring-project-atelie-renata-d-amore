@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head th:replace="~{fragments/layout :: head(${modulo.rotulo})}"></head>
+<body class="font-sans antialiased">
+<div class="min-h-screen bg-[#e8f0ef] flex">
+
+    <th:block th:replace="~{fragments/layout :: sidebar}"></th:block>
+
+    <div class="flex-1 flex flex-col min-w-0">
+        <header th:replace="~{fragments/layout :: header(${modulo.rotulo}, 'Em desenvolvimento')}"></header>
+
+        <main class="flex-1 p-4 lg:p-6 flex items-center justify-center">
+            <div class="bg-white rounded-2xl p-10 shadow-sm text-center max-w-md">
+                <i th:attr="data-lucide=${modulo.icone}" class="w-12 h-12 text-[#2d6a6a] mx-auto mb-4"></i>
+                <h2 class="text-xl font-semibold text-gray-800 mb-2" th:text="${modulo.rotulo}">Módulo</h2>
+                <p class="text-gray-500 mb-6">Este módulo ainda está em desenvolvimento.</p>
+                <a th:href="@{/dashboard}"
+                   class="inline-flex items-center gap-2 px-4 py-2 bg-[#2d6a6a] text-white rounded-full text-sm font-medium hover:bg-[#245858] transition-all">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar ao painel
+                </a>
+            </div>
+        </main>
+    </div>
+</div>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>
+

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head th:replace="~{fragments/layout :: head('Modelos de Bolsas')}"></head>
+<body class="font-sans antialiased">
+<div class="min-h-screen bg-[#e8f0ef] flex">
+
+    <!-- Menu Lateral Compartilhado -->
+    <th:block th:replace="~{fragments/layout :: sidebar}"></th:block>
+
+    <!-- Conteúdo Principal -->
+    <div class="flex-1 flex flex-col min-w-0">
+        <header th:replace="~{fragments/layout :: header('Catálogo', 'Modelos & Fichas Técnicas')}"></header>
+
+        <main class="flex-1 p-4 lg:p-6 overflow-y-auto">
+
+            <!-- Mensagens de Feedback -->
+            <div th:if="${sucesso}" class="mb-4 p-4 rounded-xl text-sm bg-green-50 text-green-700 border-l-4 border-green-500 flex items-center justify-between shadow-sm">
+                <span th:text="${sucesso}">Operação realizada com sucesso!</span>
+            </div>
+            <div th:if="${erro}" class="mb-4 p-4 rounded-xl text-sm bg-red-50 text-red-700 border-l-4 border-red-500 flex items-center justify-between shadow-sm">
+                <span th:text="${erro}">Ocorreu um erro.</span>
+            </div>
+
+            <!-- Cabeçalho do Módulo & Resumo -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="bg-white rounded-2xl p-5 shadow-sm md:col-span-2 flex items-center justify-between">
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">Modelos de Bolsas & Fichas Técnicas</h2>
+                        <p class="text-xs text-gray-500 mt-1">Defina quais modelos o ateliê produz e configure os materiais necessários para a confecção.</p>
+                    </div>
+                    <button type="button" onclick="document.getElementById('modal-modelo').classList.remove('hidden')"
+                            class="flex items-center gap-2 px-4 py-2.5 bg-[#2d6a6a] text-white rounded-full text-sm font-medium hover:bg-[#245858] hover:scale-105 transition-all shadow-sm">
+                        <i data-lucide="plus" class="w-4 h-4"></i> Novo Modelo
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-[#2d6a6a]/10 flex items-center justify-center text-[#2d6a6a]">
+                        <i data-lucide="shopping-bag" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs text-gray-500">Modelos Cadastrados</span>
+                        <p class="text-2xl font-bold text-gray-800" th:text="${totalModelos}">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulário Embutido de Edição (se estiver no modo de edição) -->
+            <div th:if="${modeloEmEdicao}" class="bg-amber-50/70 border border-amber-200 rounded-2xl p-6 mb-6 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-base font-semibold text-gray-800 flex items-center gap-2">
+                        <i data-lucide="pencil" class="w-4 h-4 text-amber-600"></i> Editando Modelo:
+                        <span class="text-[#2d6a6a]" th:text="${modeloEmEdicao.nome}">Nome</span>
+                    </h3>
+                    <a th:href="@{/modelos}" class="text-xs text-gray-500 hover:text-gray-700 underline">Cancelar Edição</a>
+                </div>
+
+                <form th:action="@{/modelos/salvar}" method="post" class="space-y-4">
+                    <input type="hidden" name="id" th:value="${modeloEmEdicao.id}">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">Nome do Modelo</label>
+                            <input type="text" name="nome" th:value="${modeloEmEdicao.nome}" required
+                                   class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-[#2d6a6a]">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">Categoria</label>
+                            <input type="text" name="categoria" th:value="${modeloEmEdicao.categoria}" required
+                                   class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-[#2d6a6a]">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">Preço de Venda (R$)</label>
+                            <input type="number" step="0.01" name="precoVenda" th:value="${modeloEmEdicao.precoVenda}" required
+                                   class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-[#2d6a6a]">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">Tempo de Produção (minutos)</label>
+                            <input type="number" name="tempoProducaoMinutos" th:value="${modeloEmEdicao.tempoProducaoMinutos}" required
+                                   class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-[#2d6a6a]">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">Descrição</label>
+                        <textarea name="descricao" rows="2" th:text="${modeloEmEdicao.descricao}"
+                                  class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-[#2d6a6a]"></textarea>
+                    </div>
+
+                    <!-- Ficha Técnica (Materiais usados) -->
+                    <div class="pt-2 border-t border-amber-200">
+                        <label class="block text-xs font-bold text-gray-700 mb-2">Materiais que compõem este modelo (Ficha Técnica):</label>
+                        <div id="container-materiais-edicao" class="space-y-2">
+                            <div th:each="item : ${modeloEmEdicao.fichaTecnica}" class="flex items-center gap-2">
+                                <select name="materialId" class="flex-1 px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm">
+                                    <option th:each="mat : ${materiaisDisponiveis}"
+                                            th:value="${mat.id}"
+                                            th:text="${mat.nome} + ' (' + ${mat.categoria} + ')'"
+                                            th:selected="${mat.id == item.materialId}">Material</option>
+                                </select>
+                                <input type="number" name="quantidade" min="1" th:value="${item.quantidadeNecessaria}"
+                                       class="w-24 px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm" placeholder="Qtd">
+                                <span class="text-xs text-gray-500 w-16" th:text="${item.unidadeMedida}">un</span>
+                                <button type="button" onclick="this.parentElement.remove()" class="p-2 text-red-500 hover:bg-red-100 rounded-lg">
+                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button type="button" onclick="adicionarLinhaMaterial('container-materiais-edicao')"
+                                class="mt-2 text-xs font-semibold text-[#2d6a6a] hover:underline flex items-center gap-1">
+                            <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Adicionar outro material à ficha
+                        </button>
+                    </div>
+
+                    <div class="flex justify-end gap-2 pt-2">
+                        <a th:href="@{/modelos}" class="px-4 py-2 bg-gray-200 text-gray-700 text-xs rounded-lg hover:bg-gray-300">Cancelar</a>
+                        <button type="submit" class="px-5 py-2 bg-[#2d6a6a] text-white text-xs font-semibold rounded-lg hover:bg-[#245858]">Salvar Alterações</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Lista de Modelos em Cards Detalhados -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                <div th:each="m : ${modelos}" class="bg-white rounded-2xl p-6 shadow-sm flex flex-col justify-between border border-gray-100 hover:border-[#2d6a6a]/30 transition-all">
+                    <div>
+                        <div class="flex items-start justify-between mb-3">
+                            <div>
+                                <span class="px-2.5 py-0.5 bg-[#2d6a6a]/10 text-[#2d6a6a] rounded-full text-xs font-medium" th:text="${m.categoria}">Casual</span>
+                                <h3 class="text-lg font-bold text-gray-800 mt-1" th:text="${m.nome}">Bolsa Tote Casual</h3>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-lg font-bold text-[#2d6a6a]" th:text="${formatadorMoeda.formatar(m.precoVenda)}">R$ 280,00</span>
+                                <p class="text-[11px] text-gray-400" th:if="${m.tempoProducaoMinutos > 0}" th:text="${m.tempoProducaoMinutos} + ' min de produção'">120 min</p>
+                            </div>
+                        </div>
+
+                        <p class="text-xs text-gray-600 mb-4" th:text="${m.descricao}">Descrição da bolsa</p>
+
+                        <!-- Ficha Técnica (Materiais usados) -->
+                        <div class="bg-gray-50 rounded-xl p-3 mb-4">
+                            <h4 class="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                                <i data-lucide="layers" class="w-3.5 h-3.5 text-[#2d6a6a]"></i> Materiais Utilizados na Confecção:
+                            </h4>
+                            <ul class="space-y-1.5 text-xs text-gray-600" th:if="${!#lists.isEmpty(m.fichaTecnica)}">
+                                <li th:each="mat : ${m.fichaTecnica}" class="flex items-center justify-between border-b border-gray-100 pb-1 last:border-0 last:pb-0">
+                                    <span class="font-medium text-gray-800 flex items-center gap-1.5">
+                                        <i data-lucide="check" class="w-3 h-3 text-green-600"></i>
+                                        <span th:text="${mat.materialNome}">Tecido Tricoline</span>
+                                    </span>
+                                    <span class="text-gray-500 font-semibold" th:text="${mat.quantidadeNecessaria} + ' ' + ${mat.unidadeMedida}">2 metros</span>
+                                </li>
+                            </ul>
+                            <p class="text-xs text-gray-400 italic" th:if="${#lists.isEmpty(m.fichaTecnica)}">Nenhum material associado a este modelo ainda.</p>
+                        </div>
+                    </div>
+
+                    <!-- Ações -->
+                    <div class="flex items-center justify-end gap-2 pt-3 border-t border-gray-100">
+                        <a th:href="@{/modelos(editar=${m.id})}"
+                           class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-[#2d6a6a] hover:bg-[#2d6a6a]/10 transition-colors">
+                            <i data-lucide="pencil" class="w-3.5 h-3.5"></i> Editar Modelo
+                        </a>
+                        <form th:action="@{'/modelos/excluir/' + ${m.id}}" method="post" class="inline"
+                              onsubmit="return confirm('Tem certeza que deseja remover este modelo de bolsa?');">
+                            <button type="submit"
+                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-red-600 hover:bg-red-50 transition-colors">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Excluir
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal para Adicionar Novo Modelo -->
+            <div id="modal-modelo" class="fixed inset-0 z-50 bg-black/50 flex items-center justify-center hidden p-4">
+                <div class="bg-white rounded-2xl p-6 w-full max-w-xl shadow-xl relative max-h-[90vh] overflow-y-auto">
+                    <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
+                        <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+                            <i data-lucide="shopping-bag" class="w-5 h-5 text-[#2d6a6a]"></i> Cadastrar Modelo de Bolsa
+                        </h3>
+                        <button type="button" onclick="document.getElementById('modal-modelo').classList.add('hidden')" class="p-1 hover:bg-gray-100 rounded-lg">
+                            <i data-lucide="x" class="w-5 h-5 text-gray-500"></i>
+                        </button>
+                    </div>
+
+                    <form th:action="@{/modelos/salvar}" method="post" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div class="md:col-span-2">
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">Nome do Modelo *</label>
+                                <input type="text" name="nome" placeholder="Ex: Mochila Urbana em Lona" required
+                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-[#2d6a6a]">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">Categoria *</label>
+                                <input type="text" name="categoria" placeholder="Ex: Casual, Mochilas" required
+                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-[#2d6a6a]">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">Preço de Venda (R$)</label>
+                                <input type="number" step="0.01" name="precoVenda" placeholder="Ex: 250.00" value="0.00"
+                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-[#2d6a6a]">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">Tempo de Produção (min)</label>
+                                <input type="number" name="tempoProducaoMinutos" placeholder="Ex: 90" value="60"
+                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-[#2d6a6a]">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">Descrição</label>
+                            <textarea name="descricao" rows="2" placeholder="Detalhes de acabamento, bolsos internos, etc."
+                                      class="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-[#2d6a6a]"></textarea>
+                        </div>
+
+                        <!-- Ficha Técnica: Selecionar quais materiais usa -->
+                        <div class="pt-3 border-t border-gray-100">
+                            <label class="block text-xs font-bold text-gray-700 mb-1">Ficha Técnica (Quais materiais são necessários?)</label>
+                            <p class="text-[11px] text-gray-400 mb-2">Selecione os materiais cadastrados no estoque e informe a quantidade por peça produzida.</p>
+
+                            <div id="container-materiais-novo" class="space-y-2">
+                                <div class="flex items-center gap-2">
+                                    <select name="materialId" class="flex-1 px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm">
+                                        <option value="" disabled selected>Selecione um material...</option>
+                                        <option th:each="mat : ${materiaisDisponiveis}"
+                                                th:value="${mat.id}"
+                                                th:text="${mat.nome} + ' (' + ${mat.categoria} + ' - em estoque: ' + ${mat.quantidade} + ' ' + ${mat.unidadeMedida} + ')'">Material</option>
+                                    </select>
+                                    <input type="number" name="quantidade" min="1" value="1"
+                                           class="w-24 px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm" placeholder="Qtd">
+                                </div>
+                            </div>
+
+                            <button type="button" onclick="adicionarLinhaMaterial('container-materiais-novo')"
+                                    class="mt-2 text-xs font-semibold text-[#2d6a6a] hover:underline flex items-center gap-1">
+                                <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> + Adicionar outro material à composição
+                            </button>
+                        </div>
+
+                        <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
+                            <button type="button" onclick="document.getElementById('modal-modelo').classList.add('hidden')"
+                                    class="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-full text-sm font-medium hover:bg-gray-200 transition-all">
+                                Cancelar
+                            </button>
+                            <button type="submit"
+                                    class="px-6 py-2.5 bg-[#2d6a6a] text-white rounded-full text-sm font-medium hover:bg-[#245858] transition-all">
+                                Cadastrar Modelo
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </main>
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+
+<!-- Template invisível para clonar linhas de materiais dinamicamente via JS -->
+<template id="template-linha-material">
+    <div class="flex items-center gap-2">
+        <select name="materialId" class="flex-1 px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm">
+            <option value="" disabled selected>Selecione um material...</option>
+            <option th:each="mat : ${materiaisDisponiveis}"
+                    th:value="${mat.id}"
+                    th:text="${mat.nome} + ' (' + ${mat.categoria} + ')'">Material</option>
+        </select>
+        <input type="number" name="quantidade" min="1" value="1"
+               class="w-24 px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm" placeholder="Qtd">
+        <button type="button" onclick="this.parentElement.remove()" class="p-2 text-red-500 hover:bg-red-100 rounded-lg" title="Remover item">
+            <i data-lucide="trash-2" class="w-4 h-4"></i>
+        </button>
+    </div>
+</template>
+
+<script>
+function adicionarLinhaMaterial(containerId) {
+    const container = document.getElementById(containerId);
+    const template = document.getElementById('template-linha-material');
+    const clone = template.content.cloneNode(true);
+    container.appendChild(clone);
+    if (window.lucide) {
+        window.lucide.createIcons();
+    }
+}
+</script>
+</body>
+</html>
+
