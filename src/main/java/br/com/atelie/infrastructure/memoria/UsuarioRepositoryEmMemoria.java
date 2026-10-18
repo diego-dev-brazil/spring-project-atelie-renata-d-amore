@@ -5,6 +5,7 @@ import br.com.atelie.domain.model.Usuario;
 import br.com.atelie.domain.repository.UsuarioComandoRepository;
 import br.com.atelie.domain.repository.UsuarioRepository;
 import br.com.atelie.domain.seguranca.CodificadorSenha;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -18,6 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Usuários guardados em memória.
  * Implementa leitura ({@link UsuarioRepository}) e escrita ({@link UsuarioComandoRepository}).
  */
+@Profile("memoria")
 @Repository
 public class UsuarioRepositoryEmMemoria implements UsuarioRepository, UsuarioComandoRepository {
 

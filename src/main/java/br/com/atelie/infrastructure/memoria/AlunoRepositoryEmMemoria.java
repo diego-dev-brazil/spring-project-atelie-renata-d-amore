@@ -3,6 +3,7 @@ package br.com.atelie.infrastructure.memoria;
 import br.com.atelie.domain.model.Aluno;
 import br.com.atelie.domain.repository.AlunoComandoRepository;
 import br.com.atelie.domain.repository.AlunoConsultaRepository;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.util.Comparator;
@@ -15,6 +16,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * Repositório em memória de Alunos.
  */
+@Profile("memoria")
 @Repository
 public class AlunoRepositoryEmMemoria implements AlunoConsultaRepository, AlunoComandoRepository {
 

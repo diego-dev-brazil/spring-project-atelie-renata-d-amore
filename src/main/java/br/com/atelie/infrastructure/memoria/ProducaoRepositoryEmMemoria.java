@@ -4,6 +4,7 @@ import br.com.atelie.domain.model.OrdemProducao;
 import br.com.atelie.domain.model.OrdemProducao.StatusProducao;
 import br.com.atelie.domain.repository.ProducaoComandoRepository;
 import br.com.atelie.domain.repository.ProducaoConsultaRepository;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -17,6 +18,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * Repositório em memória para Ordens de Produção.
  */
+@Profile("memoria")
 @Repository
 public class ProducaoRepositoryEmMemoria implements ProducaoConsultaRepository, ProducaoComandoRepository {
 

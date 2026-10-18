@@ -3,6 +3,7 @@ package br.com.atelie.infrastructure.memoria;
 import br.com.atelie.domain.model.Turma;
 import br.com.atelie.domain.repository.TurmaComandoRepository;
 import br.com.atelie.domain.repository.TurmaConsultaRepository;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -16,6 +17,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * Repositório em memória de Turmas.
  */
+@Profile("memoria")
 @Repository
 public class TurmaRepositoryEmMemoria implements TurmaConsultaRepository, TurmaComandoRepository {
 

@@ -2,11 +2,13 @@ package br.com.atelie.infrastructure.memoria;
 
 import br.com.atelie.domain.model.ConfiguracaoAtelie;
 import br.com.atelie.domain.repository.ConfiguracaoRepository;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.concurrent.atomic.AtomicReference;
 
+@Profile("memoria")
 @Repository
 public class ConfiguracaoRepositoryEmMemoria implements ConfiguracaoRepository {
 

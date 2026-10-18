@@ -3,6 +3,7 @@ package br.com.atelie.infrastructure.memoria;
 import br.com.atelie.domain.model.Material;
 import br.com.atelie.domain.repository.MaterialComandoRepository;
 import br.com.atelie.domain.repository.MaterialConsultaRepository;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -18,6 +19,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * Implementa tanto a interface de consulta quanto a de comando (ISP),
  * mas os clientes consomem apenas as interfaces específicas que precisam.
  */
+@Profile("memoria")
 @Repository
 public class MaterialRepositoryEmMemoria implements MaterialConsultaRepository, MaterialComandoRepository {
 
