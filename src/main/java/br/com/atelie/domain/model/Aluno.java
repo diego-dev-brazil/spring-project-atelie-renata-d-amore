@@ -18,11 +18,30 @@ public class Aluno {
     public Aluno(Long id, String nome, String telefone, String email, Long turmaId, String turmaNome, int parcelasPendentes) {
         this.id = id;
         this.nome = Objects.requireNonNull(nome, "Nome do aluno é obrigatório").trim();
-        this.telefone = telefone != null ? telefone.trim() : "";
+        this.telefone = formatarTelefone(telefone);
         this.email = email != null ? email.trim() : "";
         this.turmaId = turmaId;
         this.turmaNome = (turmaNome == null || turmaNome.isBlank()) ? "Sem turma" : turmaNome.trim();
         this.parcelasPendentes = Math.max(0, parcelasPendentes);
+    }
+
+    public static String formatarTelefone(String valor) {
+        if (valor == null || valor.isBlank()) {
+            return "";
+        }
+        String digitos = valor.replaceAll("\\D", "");
+        if (digitos.length() == 11) {
+            return String.format("(%s) %s-%s",
+                    digitos.substring(0, 2),
+                    digitos.substring(2, 7),
+                    digitos.substring(7, 11));
+        } else if (digitos.length() == 10) {
+            return String.format("(%s) %s-%s",
+                    digitos.substring(0, 2),
+                    digitos.substring(2, 6),
+                    digitos.substring(6, 10));
+        }
+        return valor.trim();
     }
 
     public boolean isInadimplente() {
@@ -50,7 +69,7 @@ public class Aluno {
     }
 
     public void setTelefone(String telefone) {
-        this.telefone = telefone != null ? telefone.trim() : "";
+        this.telefone = formatarTelefone(telefone);
     }
 
     public String getEmail() {

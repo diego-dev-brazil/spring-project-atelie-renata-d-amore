@@ -16,16 +16,18 @@ class MenuServiceTest {
     void adminVeTodosOsItens() {
         List<String> rotulos = service.itensPara(Perfil.ADMIN).stream().map(ItemMenu::rotulo).toList();
 
-        assertEquals(10, rotulos.size());
+        assertEquals(12, rotulos.size());
         assertTrue(rotulos.contains("Relatórios"));
         assertTrue(rotulos.contains("Usuários"));
+        assertTrue(rotulos.contains("Alterar Senha"));
     }
 
     @Test
     void funcionariaNaoVeItensDeAdmin() {
         List<String> rotulos = service.itensPara(Perfil.FUNCIONARIO).stream().map(ItemMenu::rotulo).toList();
 
-        assertEquals(7, rotulos.size());
+        assertEquals(9, rotulos.size());
+        assertTrue(rotulos.contains("Alterar Senha"));
         assertFalse(rotulos.contains("Relatórios"));
         assertFalse(rotulos.contains("Usuários"));
         assertFalse(rotulos.contains("Configurações"));

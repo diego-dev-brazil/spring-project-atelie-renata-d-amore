@@ -1,6 +1,7 @@
 package br.com.atelie.domain.model;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.Objects;
 
 /**
@@ -8,9 +9,11 @@ import java.util.Objects;
  *
  * Guarda a senha já codificada (hash), nunca a senha em texto puro.
  * Possui flag {@code ativo} para controle de acesso e {@code dataNascimento}
- * para avisos de aniversário da equipe.
+ * para avisos de aniversário da equipe e validação de idade mínima (14 anos).
  */
 public class Usuario {
+
+    public static final int IDADE_MINIMA_TRABALHO = 14;
 
     private final String login;
     private String nome;
@@ -36,7 +39,25 @@ public class Usuario {
         this.senhaCodificada = Objects.requireNonNull(senhaCodificada, "senha é obrigatória");
         this.perfil = Objects.requireNonNull(perfil, "perfil é obrigatório");
         this.ativo = ativo;
-        this.dataNascimento = dataNascimento != null ? dataNascimento : LocalDate.of(1995, 5, 15);
+        LocalDate nascimentoEfetivo = dataNascimento != null ? dataNascimento : LocalDate.of(1995, 5, 15);
+        validarIdadeMinima(nascimentoEfetivo);
+        this.dataNascimento = nascimentoEfetivo;
+    }
+
+    public static void validarIdadeMinima(LocalDate dataNascimento) {
+        if (dataNascimento == null) {
+            throw new IllegalArgumentException("A data de nascimento do funcionário é obrigatória.");
+        }
+        LocalDate hoje = LocalDate.now();
+        if (dataNascimento.isAfter(hoje)) {
+            throw new IllegalArgumentException("A data de nascimento não pode ser uma data futura.");
+        }
+        int idade = Period.between(dataNascimento, hoje).getYears();
+        if (idade < IDADE_MINIMA_TRABALHO) {
+            throw new IllegalArgumentException(
+                    "Não é permitido cadastrar funcionário menor de " + IDADE_MINIMA_TRABALHO
+                    + " anos trabalhando (idade informada: " + idade + " ano(s)).");
+        }
     }
 
     public String getLogin() {
@@ -89,6 +110,7 @@ public class Usuario {
 
     public void setDataNascimento(LocalDate dataNascimento) {
         if (dataNascimento != null) {
+            validarIdadeMinima(dataNascimento);
             this.dataNascimento = dataNascimento;
         }
     }

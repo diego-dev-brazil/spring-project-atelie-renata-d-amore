@@ -156,9 +156,14 @@
                     <p class="text-sm font-medium text-gray-800" th:text="${usuarioLogado.nome}">Nome</p>
                     <p class="text-xs text-gray-500" th:text="${usuarioLogado.perfil.descricao}">Perfil</p>
                 </div>
-                <div class="w-10 h-10 bg-[#2d6a6a] rounded-full flex items-center justify-center text-white font-serif italic"
-                     th:text="${usuarioLogado.iniciais}">R</div>
+                <a th:href="@{/minha-senha}"
+                   title="Alterar Minha Senha"
+                   class="w-10 h-10 bg-[#2d6a6a] rounded-full flex items-center justify-center text-white font-serif italic hover:ring-2 hover:ring-[#2d6a6a]/40 transition-all"
+                   th:text="${usuarioLogado.iniciais}">R</a>
             </div>
+            <a th:href="@{/minha-senha}" class="p-2 hover:bg-gray-100 rounded-full" title="Alterar Minha Senha" aria-label="Alterar Minha Senha">
+                <i data-lucide="key-round" class="w-5 h-5 text-gray-600"></i>
+            </a>
             <form th:action="@{/logout}" method="post">
                 <button type="submit" class="p-2 hover:bg-gray-100 rounded-full" title="Sair" aria-label="Sair">
                     <i data-lucide="log-out" class="w-5 h-5 text-gray-600"></i>

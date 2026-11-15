@@ -21,7 +21,7 @@ public class ConfiguracaoAtelie {
         this.nomeAtelie = nomeAtelie;
         this.proprietaria = proprietaria;
         this.cnpj = cnpj;
-        this.telefone = telefone;
+        this.telefone = Aluno.formatarTelefone(telefone);
         this.emailContato = emailContato;
         this.endereco = endereco;
         this.metaVendasMensal = metaVendasMensal != null ? metaVendasMensal : new BigDecimal("50000.00");
@@ -38,7 +38,7 @@ public class ConfiguracaoAtelie {
     public void setCnpj(String cnpj) { this.cnpj = cnpj; }
 
     public String getTelefone() { return telefone; }
-    public void setTelefone(String telefone) { this.telefone = telefone; }
+    public void setTelefone(String telefone) { this.telefone = Aluno.formatarTelefone(telefone); }
 
     public String getEmailContato() { return emailContato; }
     public void setEmailContato(String emailContato) { this.emailContato = emailContato; }

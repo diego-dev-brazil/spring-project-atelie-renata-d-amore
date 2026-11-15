@@ -32,6 +32,7 @@ public class UsuarioController {
     public String listar(Model model, @RequestParam(name = "editar", required = false) String loginEdicao) {
         model.addAttribute("usuarios", usuarioService.listarTodos());
         model.addAttribute("perfis", Perfil.values());
+        model.addAttribute("dataMaximaNascimento", LocalDate.now().minusYears(14));
 
         if (loginEdicao != null && !loginEdicao.isBlank()) {
             usuarioService.buscarPorLogin(loginEdicao)

@@ -47,5 +47,26 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   });
+
+  // Máscara automática para campos de telefone: (11) 98765-4321 ou (11) 3456-7890
+  const aplicarMascaraTelefone = (valor) => {
+    const digitos = valor.replace(/\D/g, "").slice(0, 11);
+    if (digitos.length === 0) return "";
+    if (digitos.length <= 2) return `(${digitos}`;
+    if (digitos.length <= 6) return `(${digitos.slice(0, 2)}) ${digitos.slice(2)}`;
+    if (digitos.length <= 10) {
+      return `(${digitos.slice(0, 2)}) ${digitos.slice(2, 6)}-${digitos.slice(6)}`;
+    }
+    return `(${digitos.slice(0, 2)}) ${digitos.slice(2, 7)}-${digitos.slice(7, 11)}`;
+  };
+
+  document.querySelectorAll('input[name="telefone"], [data-mascara-telefone]').forEach((input) => {
+    if (input.value) {
+      input.value = aplicarMascaraTelefone(input.value);
+    }
+    input.addEventListener("input", (e) => {
+      e.target.value = aplicarMascaraTelefone(e.target.value);
+    });
+  });
 });
 

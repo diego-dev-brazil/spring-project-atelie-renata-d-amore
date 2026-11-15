@@ -27,6 +27,7 @@ public class MenuService {
             ItemMenu.paraTodos("Vendas", "/vendas", "shopping-cart"),
             ItemMenu.paraTodos("Turmas", "/turmas", "graduation-cap"),
             ItemMenu.paraTodos("Alunos", "/alunos", "users"),
+            ItemMenu.paraTodos("Alterar Senha", "/minha-senha", "key-round"),
             ItemMenu.somenteAdmin("Relatórios", "/relatorios", "clipboard-list"),
             ItemMenu.somenteAdmin("Usuários", "/usuarios", "user-cog"),
             ItemMenu.somenteAdmin("Configurações", "/configuracoes", "settings")

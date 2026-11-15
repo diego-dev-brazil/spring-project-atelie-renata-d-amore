@@ -48,6 +48,10 @@ public class UsuarioService {
         if (senhaPura == null || senhaPura.isBlank()) {
             throw new IllegalArgumentException("A senha inicial é obrigatória.");
         }
+        if (dataNascimento == null) {
+            throw new IllegalArgumentException("A data de nascimento do funcionário é obrigatória (mínimo de 14 anos).");
+        }
+        Usuario.validarIdadeMinima(dataNascimento);
         Usuario novo = new Usuario(loginNormalizado, nome, cargo, codificadorSenha.codificar(senhaPura), perfil, true, dataNascimento);
         return comandoRepository.salvar(novo);
     }
@@ -60,17 +64,52 @@ public class UsuarioService {
             throw new IllegalArgumentException("Você não pode desativar ou remover seu próprio perfil de administradora.");
         }
 
+        if (dataNascimento != null) {
+            Usuario.validarIdadeMinima(dataNascimento);
+            existente.setDataNascimento(dataNascimento);
+        }
         existente.setNome(nome);
         existente.setCargo(cargo);
         existente.setPerfil(perfil);
         existente.setAtivo(ativo);
-        if (dataNascimento != null) {
-            existente.setDataNascimento(dataNascimento);
-        }
         if (novaSenhaPura != null && !novaSenhaPura.isBlank()) {
             existente.setSenhaCodificada(codificadorSenha.codificar(novaSenhaPura));
         }
         return comandoRepository.salvar(existente);
+    }
+
+    /**
+     * Permite que qualquer funcionário logado troque a sua própria senha,
+     * validando a senha atual antes de gravar a nova.
+     */
+    public void alterarPropriaSenha(String loginLogado,
+                                    String senhaAtualPura,
+                                    String novaSenhaPura,
+                                    String confirmacaoSenhaPura) {
+        if (loginLogado == null || loginLogado.isBlank()) {
+            throw new IllegalArgumentException("Sessão inválida. Faça login novamente.");
+        }
+        Usuario usuario = consultaRepository.buscarPorLogin(loginLogado)
+                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado."));
+
+        if (senhaAtualPura == null || senhaAtualPura.isBlank()) {
+            throw new IllegalArgumentException("Informe a sua senha atual.");
+        }
+        if (!codificadorSenha.confere(senhaAtualPura, usuario.getSenhaCodificada())) {
+            throw new IllegalArgumentException("A senha atual informada está incorreta.");
+        }
+        if (novaSenhaPura == null || novaSenhaPura.trim().length() < 4) {
+            throw new IllegalArgumentException("A nova senha deve ter pelo menos 4 caracteres.");
+        }
+        if (!novaSenhaPura.equals(confirmacaoSenhaPura)) {
+            throw new IllegalArgumentException("A confirmação da nova senha não confere.");
+        }
+        if (codificadorSenha.confere(novaSenhaPura, usuario.getSenhaCodificada())) {
+            throw new IllegalArgumentException("A nova senha deve ser diferente da senha atual.");
+        }
+
+        usuario.setSenhaCodificada(codificadorSenha.codificar(novaSenhaPura));
+        comandoRepository.salvar(usuario);
     }
 
     public void alternarAcesso(String login, String loginLogado) {
