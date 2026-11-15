@@ -4,6 +4,7 @@ import br.com.atelie.domain.model.ItemFichaTecnica;
 import br.com.atelie.domain.model.ModeloBolsa;
 import br.com.atelie.domain.repository.ModeloBolsaComandoRepository;
 import br.com.atelie.domain.repository.ModeloBolsaConsultaRepository;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -18,6 +19,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * Repositório em memória para Modelos de Bolsas.
  * Implementa tanto a interface de leitura quanto a de escrita (ISP).
  */
+@Profile("memoria")
 @Repository
 public class ModeloBolsaRepositoryEmMemoria implements ModeloBolsaConsultaRepository, ModeloBolsaComandoRepository {
 

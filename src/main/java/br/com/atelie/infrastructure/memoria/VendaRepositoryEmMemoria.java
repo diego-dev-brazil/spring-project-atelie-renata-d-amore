@@ -4,6 +4,7 @@ import br.com.atelie.domain.model.Venda;
 import br.com.atelie.domain.model.VendaMensal;
 import br.com.atelie.domain.repository.VendaConsultaRepository;
 import br.com.atelie.domain.repository.VendaRegistroRepository;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -22,6 +23,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * Quando novas vendas são adicionadas ou excluídas, o total do mês atual (Jun)
  * reflete dinamicamente as alterações no painel principal e gráficos!
  */
+@Profile("memoria")
 @Repository
 public class VendaRepositoryEmMemoria implements VendaConsultaRepository, VendaRegistroRepository {
 
